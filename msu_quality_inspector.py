@@ -15,101 +15,331 @@ from io import BytesIO
 
 # Configure page
 st.set_page_config(
-    page_title="MSU Quality Inspector",
-    page_icon="🔍",
+    page_title="MSU Quality Control System | Robotic Warehouse Automation",
+    page_icon="🏭",
     layout="wide",
     initial_sidebar_state="auto"
 )
 
-# Custom CSS for better styling
+# Professional CSS styling
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #2E86AB;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .admin-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #dc3545;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .user-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #28a745;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .metric-card {
-        background: linear-gradient(90deg, #f0f2f6 0%, #ffffff 100%);
-        padding: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid #2E86AB;
-        margin: 0.5rem 0;
-    }
-    .pass-status {
-        color: #28a745;
-        font-weight: bold;
-        font-size: 1.2rem;
-    }
-    .fail-status {
-        color: #dc3545;
-        font-weight: bold;
-        font-size: 1.2rem;
-    }
-    .warning-status {
-        color: #ffc107;
-        font-weight: bold;
-        font-size: 1.2rem;
-    }
-    .login-container {
-        max-width: 400px;
-        margin: 2rem auto;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        background: white;
-    }
-    .role-button {
-        width: 100%;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        border-radius: 10px;
-        border: none;
-        font-size: 1.1rem;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    .admin-button {
-        background: #dc3545;
-        color: white;
-    }
-    .user-button {
-        background: #28a745;
-        color: white;
-    }
-    .admin-button:hover, .user-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Global styling */
+    .main {
+        font-family: 'Inter', sans-serif;
     }
     
-    /* Mobile optimizations */
+    /* Background with overlay */
+    .main > div {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23f0f2f6" width="1200" height="800"/><g fill="%23ff6b35" opacity="0.1"><circle cx="200" cy="200" r="30"/><circle cx="400" cy="300" r="25"/><circle cx="800" cy="150" r="35"/><rect x="600" y="400" width="60" height="40" rx="5"/><rect x="300" y="500" width="80" height="50" rx="8"/></g><text x="100" y="100" font-family="Arial" font-size="24" fill="%23666" opacity="0.3">ROBOTIC WAREHOUSE AUTOMATION</text></svg>') center/cover;
+        background-attachment: fixed;
+        min-height: 100vh;
+    }
+    
+    /* Header styles */
+    .enterprise-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+    }
+    
+    .enterprise-header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .enterprise-header .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-top: 0.5rem;
+        font-weight: 300;
+    }
+    
+    .admin-header {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+        margin-bottom: 2rem;
+    }
+    
+    .user-header {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(5, 150, 105, 0.3);
+        margin-bottom: 2rem;
+    }
+    
+    /* Card styles */
+    .professional-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin: 1rem 0;
+    }
+    
+    .metric-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+        backdrop-filter: blur(15px);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid rgba(226, 232, 240, 0.5);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        margin: 1rem 0;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Status indicators */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-pass {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+    
+    .status-fail {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+    
+    .status-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+    
+    /* Login portal */
+    .login-portal {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        max-width: 500px;
+        margin: 3rem auto;
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .role-selection {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+    
+    .role-card {
+        flex: 1;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .admin-role {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border-color: #fecaca;
+    }
+    
+    .admin-role:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(220, 38, 38, 0.3);
+    }
+    
+    .user-role {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-color: #bbf7d0;
+    }
+    
+    .user-role:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(5, 150, 105, 0.3);
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+    
+    /* Sidebar styling */
+    .css-1d391kg {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+    }
+    
+    /* File uploader */
+    .stFileUploader > div {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stFileUploader > div:hover {
+        border-color: #3b82f6;
+        background: rgba(59, 130, 246, 0.05);
+    }
+    
+    /* Quality indicators */
+    .quality-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        margin: 0.5rem 0;
+        border-left: 4px solid #3b82f6;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Mobile responsiveness */
     @media (max-width: 768px) {
-        .main-header, .admin-header, .user-header {
+        .enterprise-header h1 {
             font-size: 2rem;
         }
-        .stButton > button {
-            width: 100%;
+        
+        .enterprise-header .subtitle {
+            font-size: 1rem;
+        }
+        
+        .professional-card {
+            padding: 1rem;
             margin: 0.5rem 0;
         }
-        .metric-card {
-            padding: 0.5rem;
+        
+        .login-portal {
+            margin: 1rem;
+            padding: 2rem;
         }
+        
+        .role-selection {
+            flex-direction: column;
+        }
+    }
+    
+    /* Custom tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 0.5rem;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: transparent;
+        border-radius: 8px;
+        color: #64748b;
+        font-weight: 500;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+    }
+    
+    /* Analytics styling */
+    .analytics-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+    
+    .kpi-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(226, 232, 240, 0.5);
+    }
+    
+    .kpi-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0.5rem 0;
+    }
+    
+    .kpi-label {
+        color: #64748b;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+    }
+    
+    /* Company branding */
+    .company-footer {
+        background: rgba(30, 41, 59, 0.95);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 3rem;
+        backdrop-filter: blur(15px);
+    }
+    
+    .company-footer .brand {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #ff6b35;
+        margin-bottom: 0.5rem;
+    }
+    
+    .company-footer .tagline {
+        color: #94a3b8;
+        font-size: 0.9rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -294,37 +524,82 @@ def determine_quality_status(metrics, difference_count, thresholds):
         return "FAIL", "❌"
 
 def create_analytics_charts(df):
-    """Create analytics charts from inspection data"""
+    """Create professional analytics charts"""
     if df.empty:
         return None, None, None
     
-    # Daily inspection count
+    # Daily inspection count with professional styling
     df['date'] = pd.to_datetime(df['timestamp']).dt.date
     daily_counts = df.groupby('date').size().reset_index(name='count')
     
-    fig_daily = px.line(daily_counts, x='date', y='count', 
-                       title='Daily Inspections Count',
-                       labels={'date': 'Date', 'count': 'Number of Inspections'})
-    fig_daily.update_traces(line_color='#2E86AB', line_width=3)
+    fig_daily = go.Figure()
+    fig_daily.add_trace(go.Scatter(
+        x=daily_counts['date'], 
+        y=daily_counts['count'],
+        mode='lines+markers',
+        line=dict(color='#3b82f6', width=3),
+        marker=dict(size=8, color='#1d4ed8'),
+        name='Daily Inspections',
+        hovertemplate='<b>Date:</b> %{x}<br><b>Inspections:</b> %{y}<extra></extra>'
+    ))
     
-    # Pass/Fail distribution
+    fig_daily.update_layout(
+        title='Daily Quality Inspections Trend',
+        xaxis_title='Date',
+        yaxis_title='Number of Inspections',
+        template='plotly_white',
+        showlegend=False,
+        font=dict(family="Inter", size=12),
+        title_font=dict(size=16, color='#1e293b'),
+        plot_bgcolor='rgba(255,255,255,0.9)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    # Pass/Fail distribution with custom colors
     status_counts = df['status'].value_counts()
-    fig_status = px.pie(values=status_counts.values, names=status_counts.index,
-                       title='Quality Status Distribution',
-                       color_discrete_map={
-                           'PASS': '#28a745',
-                           'WARNING': '#ffc107',
-                           'FAIL': '#dc3545'
-                       })
+    colors = {'PASS': '#10b981', 'WARNING': '#f59e0b', 'FAIL': '#ef4444'}
     
-    # Quality metrics over time
+    fig_status = go.Figure(data=[go.Pie(
+        labels=status_counts.index,
+        values=status_counts.values,
+        marker_colors=[colors.get(status, '#64748b') for status in status_counts.index],
+        textinfo='label+percent',
+        textfont=dict(size=12, family="Inter"),
+        hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
+    )])
+    
+    fig_status.update_layout(
+        title='Quality Status Distribution',
+        template='plotly_white',
+        font=dict(family="Inter", size=12),
+        title_font=dict(size=16, color='#1e293b'),
+        plot_bgcolor='rgba(255,255,255,0.9)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    # Quality metrics trend
     fig_metrics = go.Figure()
-    fig_metrics.add_trace(go.Scatter(x=df['timestamp'], y=df['ssim'],
-                                   mode='lines+markers', name='SSIM',
-                                   line=dict(color='#2E86AB')))
-    fig_metrics.update_layout(title='SSIM Quality Trend Over Time',
-                            xaxis_title='Time',
-                            yaxis_title='SSIM Score')
+    fig_metrics.add_trace(go.Scatter(
+        x=df['timestamp'], 
+        y=df['ssim'],
+        mode='lines+markers',
+        line=dict(color='#059669', width=2),
+        marker=dict(size=6),
+        name='SSIM Score',
+        hovertemplate='<b>Time:</b> %{x}<br><b>SSIM:</b> %{y:.3f}<extra></extra>'
+    ))
+    
+    fig_metrics.update_layout(
+        title='Structural Similarity Quality Trend',
+        xaxis_title='Timestamp',
+        yaxis_title='SSIM Score',
+        template='plotly_white',
+        showlegend=False,
+        font=dict(family="Inter", size=12),
+        title_font=dict(size=16, color='#1e293b'),
+        plot_bgcolor='rgba(255,255,255,0.9)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
     
     return fig_daily, fig_status, fig_metrics
 
@@ -348,199 +623,352 @@ def create_download_package():
             golden_img_data = base64.b64decode(st.session_state.golden_image_data)
             zip_file.writestr('golden_reference.png', golden_img_data)
         
-        # Add summary report
+        # Add executive summary report
         summary = f"""
-MSU Quality Inspector - Summary Report
+MSU QUALITY CONTROL SYSTEM - EXECUTIVE REPORT
+Robotic Warehouse Automation Division
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-Total Inspections: {len(df)}
-Pass: {len(df[df['status'] == 'PASS'])} ({len(df[df['status'] == 'PASS'])/len(df)*100:.1f}%)
-Warning: {len(df[df['status'] == 'WARNING'])} ({len(df[df['status'] == 'WARNING'])/len(df)*100:.1f}%)
-Fail: {len(df[df['status'] == 'FAIL'])} ({len(df[df['status'] == 'FAIL'])/len(df)*100:.1f}%)
+============================================
+EXECUTIVE SUMMARY
+============================================
 
-Average SSIM: {df['ssim'].mean():.3f}
-Average MSE: {df['mse'].mean():.2f}
-Average PSNR: {df['psnr'].mean():.2f}
+Total Quality Inspections: {len(df)}
+Pass Rate: {len(df[df['status'] == 'PASS'])/len(df)*100:.1f}%
+Warning Rate: {len(df[df['status'] == 'WARNING'])/len(df)*100:.1f}%
+Failure Rate: {len(df[df['status'] == 'FAIL'])/len(df)*100:.1f}%
+
+============================================
+QUALITY METRICS
+============================================
+
+Average Structural Similarity (SSIM): {df['ssim'].mean():.4f}
+Average Mean Squared Error (MSE): {df['mse'].mean():.2f}
+Average Peak Signal-to-Noise Ratio (PSNR): {df['psnr'].mean():.2f}
+
+============================================
+OPERATIONAL INSIGHTS
+============================================
+
+- Quality control system operational since: {df['timestamp'].min()}
+- Latest inspection: {df['timestamp'].max()}
+- Most recent SSIM score: {df['ssim'].iloc[-1]:.4f}
+- System reliability: {'Excellent' if len(df[df['status'] == 'PASS'])/len(df) > 0.9 else 'Good' if len(df[df['status'] == 'PASS'])/len(df) > 0.8 else 'Needs Attention'}
+
+============================================
+RECOMMENDATIONS
+============================================
+
+{"• Maintain current quality standards - excellent performance" if len(df[df['status'] == 'PASS'])/len(df) > 0.9 else "• Review quality thresholds and processes" if len(df[df['status'] == 'PASS'])/len(df) < 0.8 else "• Continue monitoring - stable performance"}
+• Regular calibration of golden reference images recommended
+• Consider automated reporting for continuous improvement
+
+Report generated by MSU Quality Control System v2.0
+Robotic Warehouse Automation Division
 """
-        zip_file.writestr('summary_report.txt', summary)
+        zip_file.writestr('executive_summary.txt', summary)
     
     zip_buffer.seek(0)
     return zip_buffer.getvalue()
 
 def login_page():
-    """Display login/role selection page"""
-    st.markdown('<div class="main-header">🔍 MSU Quality Inspector</div>', unsafe_allow_html=True)
+    """Professional login/role selection page"""
+    st.markdown("""
+    <div class="enterprise-header">
+        <h1>🏭 MSU Quality Control System</h1>
+        <div class="subtitle">Robotic Warehouse Automation | Enterprise Quality Management</div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
-    <div class="login-container">
-        <h3 style="text-align: center; margin-bottom: 2rem;">Select Your Role</h3>
+    <div class="login-portal">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="color: #1e293b; margin-bottom: 0.5rem;">Access Control Portal</h2>
+            <p style="color: #64748b;">Select your authorization level to continue</p>
+        </div>
+        
+        <div class="role-selection">
+            <div class="role-card admin-role" onclick="streamlit.setComponentValue('admin')">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🔧</div>
+                <h3 style="margin: 0.5rem 0; color: #dc2626;">System Administrator</h3>
+                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">Full system access & configuration</p>
+            </div>
+            
+            <div class="role-card user-role" onclick="streamlit.setComponentValue('user')">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">👨‍🔬</div>
+                <h3 style="margin: 0.5rem 0; color: #059669;">Quality Inspector</h3>
+                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">Quality control & inspection</p>
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
-        if st.button("🔧 Admin Portal", key="admin_btn", help="Upload golden images, manage settings, view analytics"):
+        admin_btn = st.button("🔧 System Administrator", key="admin_btn", help="Access: Golden image management, analytics, system configuration", use_container_width=True)
+        user_btn = st.button("👨‍🔬 Quality Inspector", key="user_btn", help="Access: Quality inspections, real-time analysis", use_container_width=True)
+        
+        if admin_btn:
             st.session_state.user_role = "admin"
             st.rerun()
         
-        if st.button("👤 Quality Inspector", key="user_btn", help="Perform quality inspections"):
+        if user_btn:
             st.session_state.user_role = "user"
             st.rerun()
     
-    st.markdown("---")
+    # Professional footer
     st.markdown("""
-    ### 📋 Role Descriptions:
-    
-    **🔧 Admin Portal:**
-    - Upload and manage golden reference images
-    - Configure quality thresholds
-    - View detailed analytics and reports
-    - Download inspection data and images
-    
-    **👤 Quality Inspector:**
-    - Quick photo capture and quality check
-    - Instant pass/fail results
-    - Mobile-optimized interface
-    - View inspection history
-    """)
+    <div class="company-footer">
+        <div class="brand">ROBOTIC WAREHOUSE AUTOMATION</div>
+        <div class="tagline">Precision • Efficiency • Innovation</div>
+        <div style="margin-top: 1rem; font-size: 0.8rem; color: #64748b;">
+            MSU Quality Control System v2.0 | Enterprise Edition
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 def admin_portal():
-    """Admin portal interface"""
-    st.markdown('<div class="admin-header">🔧 Admin Portal</div>', unsafe_allow_html=True)
+    """Professional admin portal interface"""
+    st.markdown("""
+    <div class="admin-header">
+        <h1>🔧 System Administrator Portal</h1>
+        <div class="subtitle">Enterprise Quality Control Management</div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Logout button
-    if st.button("← Back to Login", key="logout_admin"):
-        st.session_state.user_role = None
-        st.rerun()
+    # Professional logout button
+    col1, col2, col3 = st.columns([1, 4, 1])
+    with col3:
+        if st.button("🚪 Logout", key="logout_admin"):
+            st.session_state.user_role = None
+            st.rerun()
     
-    # Admin tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["🖼️ Golden Image", "⚙️ Settings", "📊 Analytics", "📥 Downloads"])
+    # Professional admin tabs
+    tab1, tab2, tab3, tab4 = st.tabs(["🖼️ Reference Management", "⚙️ System Configuration", "📊 Analytics Dashboard", "📋 Reports & Export"])
     
     with tab1:
-        st.subheader("Golden Reference Management")
+        st.markdown('<div class="professional-card">', unsafe_allow_html=True)
+        st.subheader("🎯 Golden Reference Image Management")
         
-        # Display current golden image info
+        # Current status indicator
         if st.session_state.golden_image_info:
-            st.success("✅ Golden image is configured")
+            st.markdown("""
+            <div class="status-badge status-pass">
+                ✅ REFERENCE IMAGE CONFIGURED
+            </div>
+            """, unsafe_allow_html=True)
+            
             info = st.session_state.golden_image_info
             
-            col1, col2 = st.columns(2)
+            col1, col2 = st.columns([1, 1])
             with col1:
-                st.info(f"""
-                **Current Golden Image:**
-                - Filename: {info['filename']}
-                - Upload Date: {info['upload_date']}
-                - Image Size: {info['image_size']}
-                - Notes: {info.get('admin_notes', 'None')}
-                """)
+                st.markdown(f"""
+                <div class="metric-card">
+                    <h4>📋 Current Configuration</h4>
+                    <div class="quality-indicator">
+                        <span><strong>Filename:</strong></span>
+                        <span>{info['filename']}</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span><strong>Upload Date:</strong></span>
+                        <span>{info['upload_date']}</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span><strong>Resolution:</strong></span>
+                        <span>{info['image_size'][0]} x {info['image_size'][1]} px</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span><strong>Admin Notes:</strong></span>
+                        <span>{info.get('admin_notes', 'None specified')}</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
             
             with col2:
                 golden_img = load_golden_image()
                 if golden_img:
-                    st.image(golden_img, caption="Current Golden Reference", use_column_width=True)
+                    st.image(golden_img, caption="🥇 Active Golden Reference", use_column_width=True)
         else:
-            st.warning("⚠️ No golden image configured. Please upload one below.")
+            st.markdown("""
+            <div class="status-badge status-fail">
+                ❌ NO REFERENCE IMAGE CONFIGURED
+            </div>
+            """, unsafe_allow_html=True)
+            st.warning("⚠️ System requires golden reference image configuration before quality inspections can begin.")
         
-        # Upload new golden image
-        st.subheader("Upload New Golden Image")
+        st.markdown("---")
+        
+        # Upload new reference
+        st.subheader("📤 Upload New Golden Reference")
+        
         uploaded_file = st.file_uploader(
-            "Choose golden MSU image",
+            "Select Golden Reference Image",
             type=['jpg', 'jpeg', 'png'],
-            help="This will be the reference for all quality comparisons"
+            help="Upload the master reference image for quality comparisons"
         )
         
         admin_notes = st.text_area(
-            "Admin Notes (Optional)",
-            placeholder="Add any notes about this golden image..."
+            "Technical Notes & Documentation",
+            placeholder="Document any specific details about this reference image, version, or configuration notes...",
+            height=100
         )
         
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            st.image(image, caption="Preview", use_column_width=True)
             
-            if st.button("💾 Save as Golden Reference", type="primary"):
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                st.image(image, caption="📋 Preview - New Reference", use_column_width=True)
+            
+            with col2:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <h4>📊 Image Analysis</h4>
+                    <div class="quality-indicator">
+                        <span><strong>Resolution:</strong></span>
+                        <span>{image.size[0]} x {image.size[1]} pixels</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span><strong>Format:</strong></span>
+                        <span>{image.format}</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span><strong>Mode:</strong></span>
+                        <span>{image.mode}</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span><strong>File Size:</strong></span>
+                        <span>{len(uploaded_file.getvalue()) / 1024:.1f} KB</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            if st.button("💾 Deploy as Golden Reference", type="primary", use_container_width=True):
                 if save_golden_image(image, uploaded_file.name, admin_notes):
-                    st.success("✅ Golden image saved successfully and synced across all devices!")
+                    st.success("✅ Golden reference deployed successfully across all inspection stations!")
+                    st.balloons()
                     st.rerun()
                 else:
-                    st.error("❌ Error saving golden image. Please try again.")
+                    st.error("❌ Deployment failed. Please contact system administrator.")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     with tab2:
-        st.subheader("Quality Thresholds Configuration")
+        st.markdown('<div class="professional-card">', unsafe_allow_html=True)
+        st.subheader("⚙️ Quality Control Parameters")
         
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([1, 1])
         
         with col1:
+            st.markdown("**🎯 Tolerance Settings**")
+            
             ssim_threshold = st.slider(
-                "SSIM Threshold", 
+                "Structural Similarity Index (SSIM)", 
                 0.0, 1.0, 
                 st.session_state.quality_thresholds['ssim'], 
-                0.05,
-                help="Structural Similarity threshold (higher = stricter)"
+                0.01,
+                help="Higher values = stricter quality control"
             )
             
             mse_threshold = st.slider(
-                "MSE Threshold", 
+                "Mean Squared Error (MSE)", 
                 0, 5000, 
                 st.session_state.quality_thresholds['mse'], 
-                50,
-                help="Mean Squared Error threshold (lower = stricter)"
+                25,
+                help="Lower values = stricter quality control"
             )
             
             max_diff = st.slider(
-                "Max Differences", 
+                "Maximum Defect Regions", 
                 0, 50, 
                 st.session_state.quality_thresholds['max_differences'], 
                 1,
-                help="Maximum allowed difference regions"
+                help="Maximum number of detected difference regions"
             )
         
         with col2:
-            st.info(f"""
-            **Current Settings:**
-            - SSIM Threshold: {ssim_threshold:.2f}
-            - MSE Threshold: {mse_threshold}
-            - Max Differences: {max_diff}
-            
-            **Recommendations:**
-            - Stricter quality: Increase SSIM, decrease MSE
-            - More lenient: Decrease SSIM, increase MSE
-            """)
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>📊 Current Configuration</h4>
+                <div class="quality-indicator">
+                    <span><strong>SSIM Threshold:</strong></span>
+                    <span>{ssim_threshold:.3f}</span>
+                </div>
+                <div class="quality-indicator">
+                    <span><strong>MSE Threshold:</strong></span>
+                    <span>{mse_threshold}</span>
+                </div>
+                <div class="quality-indicator">
+                    <span><strong>Max Defects:</strong></span>
+                    <span>{max_diff}</span>
+                </div>
+                <br>
+                <h4>💡 Quality Level Assessment</h4>
+                <div class="status-badge {'status-pass' if ssim_threshold >= 0.9 else 'status-warning' if ssim_threshold >= 0.8 else 'status-fail'}">
+                    {'🔒 STRICT' if ssim_threshold >= 0.9 else '⚖️ BALANCED' if ssim_threshold >= 0.8 else '🔓 LENIENT'} Quality Control
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
         
-        if st.button("💾 Save Threshold Settings"):
+        if st.button("💾 Apply Configuration Changes", type="primary", use_container_width=True):
             save_quality_thresholds({
                 'ssim': ssim_threshold,
                 'mse': mse_threshold,
                 'max_differences': max_diff
             })
-            st.success("✅ Settings saved and synced across all devices!")
+            st.success("✅ Configuration updated and synchronized across all inspection stations!")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     with tab3:
-        st.subheader("Analytics Dashboard")
+        st.markdown('<div class="professional-card">', unsafe_allow_html=True)
+        st.subheader("📊 Enterprise Analytics Dashboard")
         
         if st.session_state.inspection_history:
             df = pd.DataFrame(st.session_state.inspection_history)
             
-            # Key metrics
+            # Executive KPI Dashboard
+            st.markdown("### 📈 Key Performance Indicators")
+            
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
-                st.metric("Total Inspections", len(df))
+                st.markdown(f"""
+                <div class="kpi-card">
+                    <div class="kpi-value">{len(df)}</div>
+                    <div class="kpi-label">Total Inspections</div>
+                </div>
+                """, unsafe_allow_html=True)
             
             with col2:
                 pass_rate = len(df[df['status'] == 'PASS']) / len(df) * 100
-                st.metric("Pass Rate", f"{pass_rate:.1f}%")
+                st.markdown(f"""
+                <div class="kpi-card">
+                    <div class="kpi-value" style="color: {'#10b981' if pass_rate >= 90 else '#f59e0b' if pass_rate >= 80 else '#ef4444'}">{pass_rate:.1f}%</div>
+                    <div class="kpi-label">Pass Rate</div>
+                </div>
+                """, unsafe_allow_html=True)
             
             with col3:
                 avg_ssim = df['ssim'].mean()
-                st.metric("Avg SSIM", f"{avg_ssim:.3f}")
+                st.markdown(f"""
+                <div class="kpi-card">
+                    <div class="kpi-value">{avg_ssim:.3f}</div>
+                    <div class="kpi-label">Avg Quality Score</div>
+                </div>
+                """, unsafe_allow_html=True)
             
             with col4:
                 today_count = len(df[pd.to_datetime(df['timestamp']).dt.date == datetime.now().date()])
-                st.metric("Today's Inspections", today_count)
+                st.markdown(f"""
+                <div class="kpi-card">
+                    <div class="kpi-value">{today_count}</div>
+                    <div class="kpi-label">Today's Inspections</div>
+                </div>
+                """, unsafe_allow_html=True)
             
-            # Charts
+            # Professional Charts
             fig_daily, fig_status, fig_metrics = create_analytics_charts(df)
             
             if fig_daily:
@@ -555,119 +983,218 @@ def admin_portal():
                 if fig_metrics:
                     st.plotly_chart(fig_metrics, use_container_width=True)
             
-            # Recent inspections table
-            st.subheader("Recent Inspections")
-            recent_df = df.tail(10).sort_values('timestamp', ascending=False)
-            st.dataframe(recent_df, use_container_width=True)
+            # Recent Activity Table
+            st.markdown("### 📋 Recent Inspection Activity")
+            recent_df = df.tail(15).sort_values('timestamp', ascending=False)
+            
+            # Style the dataframe
+            def style_status(val):
+                if val == 'PASS':
+                    return 'background-color: #dcfce7; color: #166534; font-weight: bold'
+                elif val == 'WARNING':
+                    return 'background-color: #fef3c7; color: #92400e; font-weight: bold'
+                else:
+                    return 'background-color: #fee2e2; color: #991b1b; font-weight: bold'
+            
+            styled_df = recent_df.style.applymap(style_status, subset=['status'])
+            st.dataframe(styled_df, use_container_width=True, height=400)
             
         else:
-            st.info("📊 No inspection data available yet. Start using the quality inspector to see analytics.")
+            st.markdown("""
+            <div style="text-align: center; padding: 3rem; color: #64748b;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📊</div>
+                <h3>No Inspection Data Available</h3>
+                <p>Analytics will appear once quality inspections begin.</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     with tab4:
-        st.subheader("Download Reports & Data")
+        st.markdown('<div class="professional-card">', unsafe_allow_html=True)
+        st.subheader("📋 Enterprise Reporting & Data Export")
         
         if st.session_state.inspection_history:
             col1, col2 = st.columns(2)
             
             with col1:
-                # CSV download
+                st.markdown("**📊 Standard Reports**")
+                
                 df = pd.DataFrame(st.session_state.inspection_history)
                 csv = df.to_csv(index=False)
                 st.download_button(
-                    label="📊 Download CSV Report",
+                    label="📈 Download CSV Report",
                     data=csv,
-                    file_name=f"inspection_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-                    mime="text/csv"
+                    file_name=f"MSU_Quality_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                    mime="text/csv",
+                    use_container_width=True
                 )
-            
-            with col2:
-                # Complete package download
+                
+                st.markdown("**📦 Complete Data Package**")
                 zip_data = create_download_package()
                 if zip_data:
                     st.download_button(
-                        label="📦 Download Complete Package",
+                        label="📁 Download Executive Package",
                         data=zip_data,
-                        file_name=f"msu_inspection_package_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
-                        mime="application/zip"
+                        file_name=f"MSU_Executive_Package_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+                        mime="application/zip",
+                        use_container_width=True
                     )
             
-            # Clear data option
-            st.subheader("⚠️ Data Management")
-            if st.button("🗑️ Clear All Inspection Data", type="secondary"):
-                if st.checkbox("I understand this will delete all data (golden image, history, settings)"):
-                    clear_all_data()
-                    st.success("✅ All data cleared across all devices!")
-                    st.rerun()
+            with col2:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <h4>📋 Report Contents</h4>
+                    <div class="quality-indicator">
+                        <span>• Detailed inspection records</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span>• Golden reference image</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span>• Executive summary report</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span>• Quality metrics analysis</span>
+                    </div>
+                    <div class="quality-indicator">
+                        <span>• Operational recommendations</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            st.markdown("---")
+            
+            # Advanced Data Management
+            st.markdown("**⚠️ Advanced Data Management**")
+            
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                st.warning("⚠️ **CAUTION:** This action will permanently delete all system data including golden reference images, inspection history, and configuration settings.")
+            
+            with col2:
+                if st.button("🗑️ Purge All Data", type="secondary"):
+                    confirm = st.checkbox("✅ I confirm data purge authorization", key="confirm_purge")
+                    if confirm:
+                        clear_all_data()
+                        st.success("✅ System data purged successfully!")
+                        st.rerun()
         else:
-            st.info("📥 No data available for download yet.")
+            st.markdown("""
+            <div style="text-align: center; padding: 3rem; color: #64748b;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                <h3>No Data Available for Export</h3>
+                <p>Reports will be available once inspection data is collected.</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
 def user_portal():
-    """User portal interface"""
-    st.markdown('<div class="user-header">👤 Quality Inspector Portal</div>', unsafe_allow_html=True)
+    """Professional user portal interface"""
+    st.markdown("""
+    <div class="user-header">
+        <h1>👨‍🔬 Quality Inspector Portal</h1>
+        <div class="subtitle">Real-Time MSU Quality Analysis</div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Logout button
-    if st.button("← Back to Login", key="logout_user"):
-        st.session_state.user_role = None
-        st.rerun()
+    # Professional logout
+    col1, col2, col3 = st.columns([1, 4, 1])
+    with col3:
+        if st.button("🚪 Logout", key="logout_user"):
+            st.session_state.user_role = None
+            st.rerun()
     
-    # Check if golden image is configured
+    # System status check
     if not st.session_state.golden_image_data:
-        st.error("❌ No golden reference image configured. Please contact admin to upload golden image first.")
+        st.markdown("""
+        <div class="professional-card">
+            <div class="status-badge status-fail">
+                ❌ SYSTEM NOT READY
+            </div>
+            <h3>🔧 Configuration Required</h3>
+            <p>The quality control system requires golden reference image configuration by a system administrator before inspections can begin.</p>
+            <p><strong>Action Required:</strong> Contact your system administrator to configure the golden reference image.</p>
+        </div>
+        """, unsafe_allow_html=True)
         return
     
-    st.success("✅ Golden reference loaded. Ready for inspections!")
+    # System ready indicator
+    st.markdown("""
+    <div class="status-badge status-pass">
+        ✅ SYSTEM OPERATIONAL
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Display golden image info
-    with st.expander("📋 Golden Reference Info", expanded=False):
+    # Reference info in expandable section
+    with st.expander("📋 View Active Golden Reference", expanded=False):
         info = st.session_state.golden_image_info
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([1, 1])
         
         with col1:
-            st.info(f"""
-            **Golden Reference:**
-            - Filename: {info['filename']}
-            - Upload Date: {info['upload_date']}
-            - Notes: {info.get('admin_notes', 'None')}
-            """)
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>📊 Reference Configuration</h4>
+                <div class="quality-indicator">
+                    <span><strong>Reference ID:</strong></span>
+                    <span>{info['filename']}</span>
+                </div>
+                <div class="quality-indicator">
+                    <span><strong>Deployed:</strong></span>
+                    <span>{info['upload_date']}</span>
+                </div>
+                <div class="quality-indicator">
+                    <span><strong>Resolution:</strong></span>
+                    <span>{info['image_size'][0]} x {info['image_size'][1]} px</span>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col2:
             golden_img = load_golden_image()
             if golden_img:
-                st.image(golden_img, caption="Golden Reference", use_column_width=True)
+                st.image(golden_img, caption="🥇 Active Golden Reference", use_column_width=True)
     
-    # Test image upload
-    st.subheader("📸 Upload MSU for Quality Check")
+    # Main inspection interface
+    st.markdown('<div class="professional-card">', unsafe_allow_html=True)
+    st.subheader("📸 MSU Quality Inspection")
     
     st.markdown("""
-    <div style="background: #f0f8ff; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-        <h4>📱 Mobile Users:</h4>
-        <p>Use your phone's camera to take photos directly, or upload existing images from your gallery.</p>
+    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
+                padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 4px solid #0ea5e9;">
+        <h4 style="margin: 0 0 0.5rem 0; color: #0c4a6e;">📱 Mobile Inspection Instructions</h4>
+        <p style="margin: 0; color: #075985;">
+            • Position MSU in good lighting for optimal image capture<br>
+            • Ensure complete MSU visibility in frame<br>
+            • Use device camera for real-time capture or upload existing images
+        </p>
     </div>
     """, unsafe_allow_html=True)
     
     test_file = st.file_uploader(
-        "Upload Test MSU Image",
+        "Upload MSU Image for Quality Analysis",
         type=['jpg', 'jpeg', 'png'],
-        help="Upload the MSU image to be inspected - you can use your phone's camera!"
+        help="Capture or upload MSU image for automated quality inspection"
     )
     
     if test_file is not None:
         test_image = Image.open(test_file)
         golden_image = load_golden_image()
         
-        # Display images
+        # Image comparison display
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("🥇 Golden Reference")
-            st.image(golden_image, caption="Reference Image", use_column_width=True)
+            st.markdown("**🥇 Golden Reference**")
+            st.image(golden_image, caption="Master Reference Standard", use_column_width=True)
         
         with col2:
-            st.subheader("🔍 Test MSU")
-            st.image(test_image, caption="Test Image", use_column_width=True)
+            st.markdown("**🔍 Test Specimen**")
+            st.image(test_image, caption="Current MSU Under Inspection", use_column_width=True)
         
-        # Process images
-        with st.spinner("🔄 Analyzing quality..."):
+        # Analysis processing
+        with st.spinner("🔄 Performing Quality Analysis..."):
             golden_processed = preprocess_image(golden_image)
             test_processed = preprocess_image(test_image)
             
@@ -678,64 +1205,108 @@ def user_portal():
                 metrics, difference_count, st.session_state.quality_thresholds
             )
         
-        # Display results
-        st.subheader("📊 Quality Check Results")
+        # Results display
+        st.markdown("---")
+        st.subheader("📊 Quality Analysis Results")
         
-        # Status display
+        # Main status indicator
         if status == "PASS":
-            st.success(f"{status_icon} **{status}** - Quality Approved ✅")
+            st.markdown("""
+            <div class="status-badge status-pass">
+                ✅ QUALITY APPROVED - PASS
+            </div>
+            """, unsafe_allow_html=True)
         elif status == "WARNING":
-            st.warning(f"{status_icon} **{status}** - Review Required ⚠️")
+            st.markdown("""
+            <div class="status-badge status-warning">
+                ⚠️ QUALITY WARNING - REVIEW REQUIRED
+            </div>
+            """, unsafe_allow_html=True)
         else:
-            st.error(f"{status_icon} **{status}** - Quality Rejected ❌")
+            st.markdown("""
+            <div class="status-badge status-fail">
+                ❌ QUALITY REJECTED - FAIL
+            </div>
+            """, unsafe_allow_html=True)
         
-        # Metrics
+        # Detailed metrics
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            st.metric("SSIM Score", f"{metrics['ssim']:.3f}")
+            st.metric(
+                "Similarity Score", 
+                f"{metrics['ssim']:.3f}",
+                delta=f"{metrics['ssim'] - st.session_state.quality_thresholds['ssim']:.3f}"
+            )
         with col2:
-            st.metric("Differences", difference_count)
+            st.metric(
+                "Detected Defects", 
+                difference_count,
+                delta=f"{difference_count - st.session_state.quality_thresholds['max_differences']}"
+            )
         with col3:
-            st.metric("MSE", f"{metrics['mse']:.0f}")
+            st.metric("MSE Score", f"{metrics['mse']:.0f}")
         with col4:
             st.metric("PSNR", f"{metrics['psnr']:.1f} dB")
         
-        # Save inspection record
-        if st.button("💾 Save Inspection Record", type="primary"):
-            inspection_record = {
-                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                'status': status,
-                'ssim': metrics['ssim'],
-                'mse': metrics['mse'],
-                'psnr': metrics['psnr'],
-                'ncc': metrics['ncc'],
-                'differences': difference_count,
-                'filename': test_file.name,
-                'inspector': 'User'
-            }
-            
-            save_inspection_record(inspection_record)
-            st.success("✅ Inspection record saved and synced across all devices!")
+        # Save record
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            if st.button("💾 Save Inspection", type="primary", use_container_width=True):
+                inspection_record = {
+                    'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    'status': status,
+                    'ssim': metrics['ssim'],
+                    'mse': metrics['mse'],
+                    'psnr': metrics['psnr'],
+                    'ncc': metrics['ncc'],
+                    'differences': difference_count,
+                    'filename': test_file.name,
+                    'inspector': 'Quality Inspector'
+                }
+                
+                save_inspection_record(inspection_record)
+                st.success("✅ Inspection record saved to enterprise database!")
     
-    # Quick stats for user
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Inspector dashboard
     if st.session_state.inspection_history:
-        st.subheader("📈 Quick Stats")
+        st.markdown('<div class="professional-card">', unsafe_allow_html=True)
+        st.subheader("📈 Inspector Performance Dashboard")
+        
         df = pd.DataFrame(st.session_state.inspection_history)
         
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.metric("Total Inspections", len(df))
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-value">{len(df)}</div>
+                <div class="kpi-label">Total Inspections</div>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col2:
             pass_count = len(df[df['status'] == 'PASS'])
             pass_rate = pass_count / len(df) * 100
-            st.metric("Pass Rate", f"{pass_rate:.1f}%")
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-value" style="color: {'#10b981' if pass_rate >= 90 else '#f59e0b' if pass_rate >= 80 else '#ef4444'}">{pass_rate:.1f}%</div>
+                <div class="kpi-label">Pass Rate</div>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col3:
             today_count = len(df[pd.to_datetime(df['timestamp']).dt.date == datetime.now().date()])
-            st.metric("Today's Count", today_count)
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-value">{today_count}</div>
+                <div class="kpi-label">Today's Count</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # Main application
 def main():
