@@ -114,36 +114,114 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state
+# File-based storage functions
+def get_data_file_path(filename):
+    """Get path for data files"""
+    return f"./{filename}"
+
+def save_to_file(data, filename):
+    """Save data to JSON file"""
+    try:
+        with open(get_data_file_path(filename), 'w') as f:
+            json.dump(data, f, indent=2)
+        return True
+    except Exception as e:
+        st.error(f"Error saving data: {e}")
+        return False
+
+def load_from_file(filename):
+    """Load data from JSON file"""
+    try:
+        with open(get_data_file_path(filename), 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+    except Exception as e:
+        st.error(f"Error loading data: {e}")
+        return None
+
+# Initialize session state with file-based persistence
 def initialize_session_state():
     if 'user_role' not in st.session_state:
         st.session_state.user_role = None
+    
+    # Load golden image data from file
     if 'golden_image_data' not in st.session_state:
-        st.session_state.golden_image_data = None
+        golden_data = load_from_file('golden_image.json')
+        st.session_state.golden_image_data = golden_data.get('image_data') if golden_data else None
+    
     if 'golden_image_info' not in st.session_state:
-        st.session_state.golden_image_info = {}
+        golden_data = load_from_file('golden_image.json')
+        st.session_state.golden_image_info = golden_data.get('info', {}) if golden_data else {}
+    
+    # Load inspection history from file
     if 'inspection_history' not in st.session_state:
-        st.session_state.inspection_history = []
+        history_data = load_from_file('inspection_history.json')
+        st.session_state.inspection_history = history_data if history_data else []
+    
+    # Load quality thresholds from file
     if 'quality_thresholds' not in st.session_state:
-        st.session_state.quality_thresholds = {
+        threshold_data = load_from_file('quality_thresholds.json')
+        st.session_state.quality_thresholds = threshold_data if threshold_data else {
             'ssim': 0.85,
             'mse': 1000,
             'max_differences': 5
         }
 
 def save_golden_image(image, filename, admin_notes=""):
-    """Save golden image to session state with metadata"""
+    """Save golden image to persistent file storage"""
     # Convert PIL image to base64 for storage
     buffered = BytesIO()
     image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
     
-    st.session_state.golden_image_data = img_str
-    st.session_state.golden_image_info = {
-        'filename': filename,
-        'upload_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        'admin_notes': admin_notes,
-        'image_size': image.size
+    # Create data structure
+    golden_data = {
+        'image_data': img_str,
+        'info': {
+            'filename': filename,
+            'upload_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'admin_notes': admin_notes,
+            'image_size': image.size
+        }
+    }
+    
+    # Save to file and update session state
+    if save_to_file(golden_data, 'golden_image.json'):
+        st.session_state.golden_image_data = img_str
+        st.session_state.golden_image_info = golden_data['info']
+        return True
+    return False
+
+def save_inspection_record(record):
+    """Save inspection record to persistent storage"""
+    st.session_state.inspection_history.append(record)
+    save_to_file(st.session_state.inspection_history, 'inspection_history.json')
+
+def save_quality_thresholds(thresholds):
+    """Save quality thresholds to persistent storage"""
+    st.session_state.quality_thresholds = thresholds
+    save_to_file(thresholds, 'quality_thresholds.json')
+
+def clear_all_data():
+    """Clear all persistent data"""
+    import os
+    files_to_remove = ['golden_image.json', 'inspection_history.json', 'quality_thresholds.json']
+    
+    for filename in files_to_remove:
+        try:
+            os.remove(get_data_file_path(filename))
+        except FileNotFoundError:
+            pass  # File doesn't exist, which is fine
+    
+    # Reset session state
+    st.session_state.golden_image_data = None
+    st.session_state.golden_image_info = {}
+    st.session_state.inspection_history = []
+    st.session_state.quality_thresholds = {
+        'ssim': 0.85,
+        'mse': 1000,
+        'max_differences': 5
     }
 
 def load_golden_image():
@@ -261,7 +339,7 @@ def create_download_package():
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
         # Add inspection report CSV
         df = pd.DataFrame(st.session_state.inspection_history)
-        csv_buffer = StringIO()
+        csv_buffer = io.StringIO()
         df.to_csv(csv_buffer, index=False)
         zip_file.writestr('inspection_report.csv', csv_buffer.getvalue())
         
@@ -382,9 +460,11 @@ def admin_portal():
             st.image(image, caption="Preview", use_column_width=True)
             
             if st.button("💾 Save as Golden Reference", type="primary"):
-                save_golden_image(image, uploaded_file.name, admin_notes)
-                st.success("✅ Golden image saved successfully!")
-                st.rerun()
+                if save_golden_image(image, uploaded_file.name, admin_notes):
+                    st.success("✅ Golden image saved successfully and synced across all devices!")
+                    st.rerun()
+                else:
+                    st.error("❌ Error saving golden image. Please try again.")
     
     with tab2:
         st.subheader("Quality Thresholds Configuration")
@@ -429,12 +509,12 @@ def admin_portal():
             """)
         
         if st.button("💾 Save Threshold Settings"):
-            st.session_state.quality_thresholds = {
+            save_quality_thresholds({
                 'ssim': ssim_threshold,
                 'mse': mse_threshold,
                 'max_differences': max_diff
-            }
-            st.success("✅ Settings saved!")
+            })
+            st.success("✅ Settings saved and synced across all devices!")
     
     with tab3:
         st.subheader("Analytics Dashboard")
@@ -514,9 +594,9 @@ def admin_portal():
             # Clear data option
             st.subheader("⚠️ Data Management")
             if st.button("🗑️ Clear All Inspection Data", type="secondary"):
-                if st.checkbox("I understand this will delete all inspection history"):
-                    st.session_state.inspection_history = []
-                    st.success("✅ All inspection data cleared!")
+                if st.checkbox("I understand this will delete all data (golden image, history, settings)"):
+                    clear_all_data()
+                    st.success("✅ All data cleared across all devices!")
                     st.rerun()
         else:
             st.info("📥 No data available for download yet.")
@@ -635,8 +715,8 @@ def user_portal():
                 'inspector': 'User'
             }
             
-            st.session_state.inspection_history.append(inspection_record)
-            st.success("✅ Inspection record saved!")
+            save_inspection_record(inspection_record)
+            st.success("✅ Inspection record saved and synced across all devices!")
     
     # Quick stats for user
     if st.session_state.inspection_history:
