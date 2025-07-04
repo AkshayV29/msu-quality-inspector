@@ -15,8 +15,8 @@ from io import BytesIO
 
 # Configure page
 st.set_page_config(
-    page_title="MSU Quality Control System | Robotic Warehouse Automation",
-    page_icon="🏭",
+    page_title="MSU Quality Control System | GreyOrange",
+    page_icon="🟠",
     layout="wide",
     initial_sidebar_state="auto"
 )
@@ -31,10 +31,10 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
     
-    /* Background with overlay */
+    /* Background with GreyOrange warehouse automation image */
     .main > div {
-        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23f0f2f6" width="1200" height="800"/><g fill="%23ff6b35" opacity="0.1"><circle cx="200" cy="200" r="30"/><circle cx="400" cy="300" r="25"/><circle cx="800" cy="150" r="35"/><rect x="600" y="400" width="60" height="40" rx="5"/><rect x="300" y="500" width="80" height="50" rx="8"/></g><text x="100" y="100" font-family="Arial" font-size="24" fill="%23666" opacity="0.3">ROBOTIC WAREHOUSE AUTOMATION</text></svg>') center/cover;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23434343;stop-opacity:1" /><stop offset="100%" style="stop-color:%23000000;stop-opacity:1" /></linearGradient></defs><rect fill="url(%23bg)" width="1200" height="800"/><g fill="%23ff6b35" opacity="0.15"><rect x="100" y="600" width="80" height="60" rx="8"/><rect x="300" y="550" width="100" height="80" rx="10"/><rect x="500" y="580" width="90" height="70" rx="8"/><rect x="700" y="520" width="120" height="90" rx="12"/><rect x="900" y="570" width="110" height="75" rx="10"/><circle cx="150" cy="300" r="25"/><circle cx="350" cy="250" r="30"/><circle cx="550" cy="280" r="28"/><circle cx="750" cy="320" r="35"/><circle cx="950" cy="290" r="32"/><rect x="200" y="400" width="60" height="40" rx="5"/><rect x="400" y="420" width="70" height="45" rx="6"/><rect x="600" y="380" width="65" height="50" rx="7"/><rect x="800" y="410" width="75" height="35" rx="5"/></g><text x="50" y="100" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="%23ff6b35" opacity="0.8">ROBOTIC WAREHOUSE</text><text x="50" y="140" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="%23ff6b35" opacity="0.8">AUTOMATION</text><text x="50" y="180" font-family="Arial, sans-serif" font-size="16" fill="%23ffffff" opacity="0.6">Precision • Efficiency • Innovation</text></svg>') center/cover no-repeat;
         background-attachment: fixed;
         min-height: 100vh;
     }
@@ -331,15 +331,10 @@ st.markdown("""
     }
     
     .company-footer .brand {
-        font-size: 1.2rem;
-        font-weight: 600;
+        font-size: 1.5rem;
+        font-weight: 700;
         color: #ff6b35;
         margin-bottom: 0.5rem;
-    }
-    
-    .company-footer .tagline {
-        color: #94a3b8;
-        font-size: 0.9rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -675,8 +670,8 @@ def login_page():
     """Professional login/role selection page"""
     st.markdown("""
     <div class="enterprise-header">
-        <h1>🏭 MSU Quality Control System</h1>
-        <div class="subtitle">Robotic Warehouse Automation | Enterprise Quality Management</div>
+        <h1>🟠 MSU Quality Control System</h1>
+        <div class="subtitle">GreyOrange | Enterprise Quality Management</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -685,20 +680,6 @@ def login_page():
         <div style="text-align: center; margin-bottom: 2rem;">
             <h2 style="color: #1e293b; margin-bottom: 0.5rem;">Access Control Portal</h2>
             <p style="color: #64748b;">Select your authorization level to continue</p>
-        </div>
-        
-        <div class="role-selection">
-            <div class="role-card admin-role" onclick="streamlit.setComponentValue('admin')">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">🔧</div>
-                <h3 style="margin: 0.5rem 0; color: #dc2626;">System Administrator</h3>
-                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">Full system access & configuration</p>
-            </div>
-            
-            <div class="role-card user-role" onclick="streamlit.setComponentValue('user')">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">👨‍🔬</div>
-                <h3 style="margin: 0.5rem 0; color: #059669;">Quality Inspector</h3>
-                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">Quality control & inspection</p>
-            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -720,11 +701,7 @@ def login_page():
     # Professional footer
     st.markdown("""
     <div class="company-footer">
-        <div class="brand">ROBOTIC WAREHOUSE AUTOMATION</div>
-        <div class="tagline">Precision • Efficiency • Innovation</div>
-        <div style="margin-top: 1rem; font-size: 0.8rem; color: #64748b;">
-            MSU Quality Control System v2.0 | Enterprise Edition
-        </div>
+        <div class="brand">GreyOrange</div>
     </div>
     """, unsafe_allow_html=True)
 
